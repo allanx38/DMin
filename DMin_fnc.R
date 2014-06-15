@@ -181,9 +181,7 @@ Pl_per_a4 <- function(dw_rr){
   
   res <- as.data.frame(matrix(seq(3),nrow=1,ncol=3))
   colnames(res) <- c('Desc','PL','Win %')
-  
   #long trade
-  
   for(i in seq(0,500,100)){
     qq <- with(dw_rr, (dw_rr[a4>i & a4< i+100,]) )
     nm <- paste('from',as.character(i), 'to', as.character(i+100))
@@ -203,5 +201,4 @@ Pl_per_a4 <- function(dw_rr){
   }
   res <- res[-1,]
   return(res)
-  
 }

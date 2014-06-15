@@ -3,8 +3,9 @@
 # 3. Calc DM values
 # 4. Generate res file (if necessary)
 
-setwd("D:/Allan/DropBox/RWorkingDir/Trading/DMin")
+#setwd("D:/Allan/DropBox/RWorkingDir/Trading/DMin")
 #setwd("F:/Allan/R Stuff/Dax")
+setwd("D:/Allan/DropBox/Dmin")
 
 #source("D:/Allan/DropBox/RWorkingDir/Trading/Dax/DMin_fnc.R")
 source("DMin_fnc.R")
@@ -74,10 +75,6 @@ Dow <- read.csv("Dow_2000.csv")
 tail(Dow)
 addTAInd_prev(Dow,"Dow")
 
-Dow_t <- read.csv("Dow_2000_t.csv")
-tail(Dow_t)
-addTAInd_prev(Dow_t,"Dow_t")
-
 N225 <- read.csv("N225_2000.csv")
 tail(N225)
 addTAInd_prev(N225,"N225")
@@ -90,62 +87,34 @@ addTAInd_prev(Oz,"Oz")
 # 3. Calc DM values - today
 
 #a. ------------- Dax
-#Dax_tap <- read.csv("D:/Allan/DropBox/RWorkingDir/Trading/Data/Dax_tap.csv")
+
 Dax_tap <- read.csv("Dax_tap.csv")
 Dax_tap$Date[nrow(Dax_tap)]
-ln <- nrow(Dax_tap) ;ln
-dx_res <- r_p_ind(Dax_tap, ln) ;dx_res
+dx_res <- calc_dm_today(Dax_tap) ;dx_res
 
 #b. ------------ CAC
-#CAC_tap <- read.csv("D:/Allan/DropBox/RWorkingDir/Trading/Data/CAC_tap.csv")
-CAC_tap <- read.csv("../Data/CAC_tap.csv")
+CAC_tap <- read.csv("CAC_tap.csv")
 CAC_tap$Date[nrow(CAC_tap)]
-ln <- nrow(CAC_tap) ;ln
-cac_res <- r_p_ind(CAC_tap, ln) ;cac_res
+cac_res <- calc_dm_today(CAC_tap) ;cac_res
 
 # c. ------------ FTSE 
-#F100_tap <- read.csv("D:/Allan/DropBox/RWorkingDir/Trading/Data/F100_tap.csv")
 F100_tap <- read.csv("F100_tap.csv")
 F100_tap$Date[nrow(F100_tap)]
-ln <- nrow(F100_tap) ;ln
-f100_res <- r_p_ind(F100_tap, ln) ;f100_res
+f100_res <- calc_dm_today(F100_tap) ;f100_res
 
 # d. ------------ Dow 
 Dow_tap <- read.csv("Dow_tap.csv")
 calc_dm_today(Dow_tap)
 
-
-ln <- nrow(Dow_tap) ;ln
-st <- ln-1000;st
-Dow_tap <- Dow_tap[st:ln,]
-dow_res <- r_curr_ta(Dow_tap, ln-1)
-
-Dow_tap <- Dow_tap[-ln,]
-Dow_tap$Date[nrow(Dow_tap)]
-
-ln <- nrow(Dow_tap) ;ln
-
-tail(Dow_tap)
-Dow_tap$Date[nrow(Dow_tap)]
-ln <- nrow(Dow_tap) ;ln
-
-dow_res <- r_curr_ta(Dow_tap, ln-1) ;dow_res
-dow_res <- r_prev_ta(Dow_tap, ln) ;dow_res
-
-
 # e. ------------ N225 
-#N225_tap <- read.csv("D:/Allan/DropBox/RWorkingDir/Trading/Data/N225_tap.csv")
-N225_tap <- read.csv("../Data/N225_tap.csv")
+N225_tap <- read.csv("N225_tap.csv")
 N225_tap$Date[nrow(N225_tap)]
-ln <- nrow(N225_tap) ;ln
-n225_res <- r_p_ind(N225_tap, ln) ;n225_res
+n225_res <- calc_dm_today(N225_tap) ;n225_res
 
 # f. ------------ Oz 
-#Oz_tap <- read.csv("D:/Allan/DropBox/RWorkingDir/Trading/Data/Oz_tap.csv")
-Oz_tap <- read.csv("../Data/Oz_tap.csv")
+Oz_tap <- read.csv("Oz_tap.csv")
 Oz_tap$Date[nrow(Oz_tap)]
-ln <- nrow(Oz_tap) ;ln
-oz_res <- r_p_ind(Oz_tap, ln) ;oz_res
+oz_res <- calc_dm_today(Oz_tap) ;oz_res
 
 paste(c('Dax',as.character.Date(Dax_tap$Date[nrow(Dax_tap)]),dx_res))
 paste(c('CAC',as.character.Date(CAC_tap$Date[nrow(CAC_tap)]),cac_res))
