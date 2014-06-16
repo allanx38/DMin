@@ -171,7 +171,7 @@ tail(mkt1,2)
 lt_row <- nrow(mkt1)
 r <- r_prev_ta(mkt1,lt_row)
 
-ni_rr <- test(N225_tap,2000)
+ni_rr <- test2(N225_tap,2000)
 ni_rr$pl2 <- ifelse(ni_rr$a4>0,ni_rr$pl,-ni_rr$pl)
 ni_rr$wl <- ifelse(ni_rr$pl2>0,1,0)
 ni_rr$sm10 <- (SMA(ni_rr["wl"], 10)) * 10
@@ -188,6 +188,7 @@ tail(dx_rr)
 tail(cc_rr)
 tail(ft_rr)
 tail(dw_rr)
+tail(ni_rr)
 
 source('DMin_fnc.R')
 Pl_per_a4(dx_rr)
