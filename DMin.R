@@ -4,7 +4,7 @@
 # 4. Generate res file (if necessary)
 
 #setwd("D:/Allan/DropBox/RWorkingDir/Trading/DMin")
-#setwd("F:/Allan/R Stuff/Dax")
+setwd("F:/Allan/R Stuff/DMin")
 setwd("D:/Allan/DropBox/Dmin")
 
 #source("D:/Allan/DropBox/RWorkingDir/Trading/Dax/DMin_fnc.R")
@@ -123,6 +123,36 @@ paste(c('Dow',as.character.Date(Dow_tap$Date[nrow(Dow_tap)]),dow_res))
 paste(c('N225',as.character.Date(N225_tap$Date[nrow(N225_tap)]),n225_res))
 paste(c('Oz',as.character.Date(Oz_tap$Date[nrow(Oz_tap)]),oz_res))
 
+# -----------------------------------------------
+source("DMin_fnc.R")
+Dax_tap <- read.csv("Dax_tap.csv")
+Dax_tap <- read.csv("CAC_tap.csv")
+Dax_tap <- read.csv("F100_tap.csv")
+Dax_tap <- read.csv("N225_tap.csv")
+
+tail(Dax_tap)
+Dax_tap$Date[nrow(Dax_tap)]
+nr <- nrow(Dax_tap);nr
+au <- Dax_tap$aroonUp[nr];au
+ad <- Dax_tap$aroonDn[nr] ;ad
+os <- Dax_tap$oscillator[nr];os
+df <- Dax_tap$Diff[nr];df
+au_df2(Dax_tap, au, df)
+ad_df2(Dax_tap, au, df)
+
+Mkt <- Dax_tap
+r <- Mkt[ (Mkt$prev_aroon_up == au) & 
+            (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+          c(18) ]
+r
+r <- r[!is.na(r)]
+r
+sm <- sum(r,na.rm=T);sm
+gt <- sum(r<0);gt
+lt <- sum(r>0);lt
+res <- c(sm,gt,lt)
+
+
 # ------------------------------------------------
 # 4. results
 
@@ -171,10 +201,13 @@ tail(mkt1,2)
 lt_row <- nrow(mkt1)
 r <- r_prev_ta(mkt1,lt_row)
 
-ni_rr <- test2(N225_tap,2000)
+N225_tap <- read.csv("N225_tap.csv")
+ni_rr <- test2a(N225_tap,2000)
 ni_rr$pl2 <- ifelse(ni_rr$a4>0,ni_rr$pl,-ni_rr$pl)
 ni_rr$wl <- ifelse(ni_rr$pl2>0,1,0)
 ni_rr$sm10 <- (SMA(ni_rr["wl"], 10)) * 10
+tail(ni_rr)
+tail(N225_tap)
 
 sum(ni_rr$pl2)
 sum(ni_rr$pl2 > 0) / ( sum(ni_rr$pl2 < 0) + sum(ni_rr$pl2 > 0) )
@@ -216,12 +249,12 @@ tail(un1)
 # merge pairs
 un1 <- merge(dx_rr[,c(1,9,11,13)],
              cc_rr[,c(1,9,11,13)], 
-            by='Date',all=T)
+             by='Date',all=T)
 colnames(un1) <- c('Date', 'DxA4','DxPL','DxSM','CcA4','CcPL','CcSM')
 
 un2 <- merge(ft_rr[,c(1,9,11,13)],
              dw_rr[,c(1,9,11,13)], 
-            by='Date',all=T)
+             by='Date',all=T)
 colnames(un2) <- c('Date', 'FtA4','FtPL','FtSM','DwA4','DwPL','DwSM')
 
 un3 <- merge(ni_rr[,c(1,9,11,13)],
@@ -294,3 +327,75 @@ qq <- with(dw_rr, (dw_rr[a4<0,]) )
 nrow(qq)
 sum(qq$pl2) / nrow(qq)
 sum(qq$pl2>0) / ( sum(qq$pl2<0) + sum(qq$pl2>0) )
+
+source("DMin_fnc.R")
+Mkt <- read.csv("N225_tap.csv")
+tail(Mkt)
+nr <- nrow(Mkt);nr
+Mkt <- Mkt[1:(nr-1),]
+nr <- nrow(Mkt);nr
+# curr ...
+au <- Mkt$aroonUp[nr] 
+ad <- Mkt$aroonDn[nr] 
+os <- Mkt$oscillator[nr] 
+df <- Mkt$Diff[nr] 
+
+nn <- GetData(Mkt)
+tail(nn)
+
+rr <- r_curr_ta_2(nn, au, ad, os, df) 
+rr
+
+N225_tap <- read.csv("N225_tap.csv")
+ni_rr <- test2b(N225_tap,3092)
+ni_rr$pl2 <- ifelse(ni_rr$a4>0,ni_rr$pl,-ni_rr$pl)
+ni_rr$pl2 <- ifelse(ni_rr$a4>0,ni_rr$Close-ni_rr$Open,ni_rr$Open-ni_rr$Close)
+ni_rr$wl <- ifelse(ni_rr$pl2>0,1,0)
+ni_rr$sm10 <- (SMA(ni_rr["wl"], 10)) * 10
+tail(ni_rr)
+tail(N225_tap)
+
+sum(ni_rr$pl2)
+sum(ni_rr$pl2 > 0) / ( sum(ni_rr$pl2 < 0) + sum(ni_rr$pl2 > 0) )
+
+Mkt <- read.csv("N225_tap.csv")
+Mkt <- Mkt[100:3492,]
+tail(Mkt)
+sum(Mkt$pl)
+nr <- nrow(Mkt);nr
+nr <- nr - 3
+au <- Mkt$prev_aroon_up[nr];au
+ad <- Mkt$prev_aroon_dn[nr] ;ad
+os <- Mkt$prev_aroon_os[nr] ;os
+df <- Mkt$prev_smadiff[nr] ;df
+
+Mkt <- GetData(Mkt)
+
+r <- Mkt[ (Mkt$prev_aroon_up == au) & 
+       (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+     c(18) ]
+
+sum(r)
+length(r)
+sum(r>0) /  length(r)
+sum(r<0)
+sum(r>0)
+
+sum ( Mkt[ (Mkt$prev_aroon_up == au) & 
+             (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+           c(18) ] ,na.rm=T)
+
+Mkt$pl[nr]
+Mkt$Date[nr]
+
+nn <- GetData(Mkt)
+tail(nn)
+
+rr <- r_curr_ta_2(nn, au, ad, os, df) 
+rr
+
+au_df <- function(Mkt, au, df){
+  sum ( Mkt[ (Mkt$prev_aroon_up == au) & 
+               (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+             c(18) ] ,na.rm=T)
+}
