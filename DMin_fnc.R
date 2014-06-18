@@ -84,6 +84,17 @@ os_df <- function(Mkt, os, df){
              c(18) ] ,na.rm=T)
 }
 
+os_df2 <- function(Mkt, os, df){
+  r <- Mkt[ (Mkt$prev_aroon_os == os) & 
+               (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+             c(18) ]
+  r <- r[!is.na(r)]
+  sm <- sum(r,na.rm=T)
+  gt <- sum(r>0,na.rm=T)
+  lt <- sum(r<0,na.rm=T)
+  res <- c(sm,gt,lt)
+  return(res)
+}
 
 # # applies comp functions to one row, uisng current rows
 # predicts tomorrow's dir
@@ -121,6 +132,7 @@ r_prev_ta <- function(Mkt, nr){
   ad <- Mkt$prev_aroon_dn[nr] 
   os <- Mkt$prev_aroon_os[nr] 
   df <- Mkt$prev_smadiff[nr]  
+  Mkt <- Mkt[-nr]
   c <- au_df(Mkt,au,df)
   d <- ad_df(Mkt,ad,df)
   e <- os_df(Mkt,os,df)
@@ -145,15 +157,24 @@ r_prev_ta_2 <- function(Mkt, au, ad, os, df, nr){
   return(c(c,d,e,e2,f))
 }
 
-calc_dm_today <- function(mkt){
+calc_dm_today <- function(Mkt){
   # get last 1000 rows
-  ln <- nrow(mkt)
-  st <- ln-1000
-  mkt_1<- mkt[st:ln,]
+  nr <- nrow(Mkt)
+  #st <- ln-1000
+  #Mkt <- Mkt[1500:ln]
   
-  #calc DM
-  ln_mkt1 <- nrow(mkt_1)
-  res <- r_curr_ta(mkt_1, ln_mkt1)
+  au <- Mkt$aroonUp[nr] 
+  ad <- Mkt$aroonDn[nr] 
+  os <- Mkt$oscillator[nr] 
+  df <- Mkt$Diff[nr]  
+  
+  Mkt <- Mkt[-nr,]
+  
+  c <- au_df(Mkt,au,df);c
+  d <- ad_df(Mkt,ad,df);d
+  e <- os_df(Mkt,os,df);e
+  res <- c+d+e
+  
   return(res)
 }
 

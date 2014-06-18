@@ -104,6 +104,7 @@ f100_res <- calc_dm_today(F100_tap) ;f100_res
 
 # d. ------------ Dow 
 Dow_tap <- read.csv("Dow_tap.csv")
+Dow_tap$Date[nrow(Dow_tap)]
 calc_dm_today(Dow_tap)
 
 # e. ------------ N225 
@@ -129,6 +130,7 @@ Dax_tap <- read.csv("Dax_tap.csv")
 Dax_tap <- read.csv("CAC_tap.csv")
 Dax_tap <- read.csv("F100_tap.csv")
 Dax_tap <- read.csv("N225_tap.csv")
+Dax_tap <- read.csv("Oz_tap.csv")
 
 tail(Dax_tap)
 Dax_tap$Date[nrow(Dax_tap)]
@@ -139,6 +141,7 @@ os <- Dax_tap$oscillator[nr];os
 df <- Dax_tap$Diff[nr];df
 au_df2(Dax_tap, au, df)
 ad_df2(Dax_tap, au, df)
+os_df2(Dax_tap, au, df)
 
 Mkt <- Dax_tap
 r <- Mkt[ (Mkt$prev_aroon_up == au) & 
@@ -167,15 +170,80 @@ Oz_tap <- read.csv("Oz_tap.csv")
 
 tail(Dow_tap)
 
+Dax_tap <- read.csv("N225_tap.csv")
+
+calc_dm_today(Dax_tap)
+
 # calc DM pl
 dx_rr <- test(Dax_tap,2000)
 dx_rr$pl2 <- ifelse(dx_rr$a4>0,dx_rr$pl,-dx_rr$pl)
 dx_rr$wl <- ifelse(dx_rr$pl2>0,1,0)
 dx_rr$sm10 <- (SMA(dx_rr["wl"], 10)) * 10
-tail(dx_rr)
-#sum(dx_rr$pl2)
+tail(dx_rr,n=20)
+sum(dx_rr$pl2)
 #sum(dx_rr$pl2 > 0) / ( sum(dx_rr$pl2 < 0) + sum(dx_rr$pl2 > 0) )
 #tail(dx_rr)
+
+nr <- nrow(Dax_tap);nr
+r_prev_ta(Dax_tap, nr)
+
+Mkt <- Dax_tap
+
+nr <- nrow(Mkt);nr
+Mkt <- Mkt[-nr,]
+nr <- nrow(Mkt);nr
+
+au <- Mkt$prev_aroon_up[nr] 
+ad <- Mkt$prev_aroon_dn[nr] 
+os <- Mkt$prev_aroon_os[nr] 
+df <- Mkt$prev_smadiff[nr]  
+Mkt <- Mkt[-nr,]
+c <- au_df(Mkt,au,df);c
+d <- ad_df(Mkt,ad,df);d
+e <- os_df(Mkt,os,df);e
+e2 <- c+d+e
+f <- Mkt$pl[nr]
+
+c <- au_df2(Mkt,au,df);c
+d <- ad_df2(Mkt,ad,df);d
+e <- os_df2(Mkt,os,df);e
+
+source("DMin_fnc.R")
+N225_tap <- read.csv("N225_tap.csv")
+Dax_tap <- read.csv("Dax_tap.csv")
+
+Mkt <- Dax_tap
+nr <- nrow(Mkt);nr
+Mkt <- Mkt[1:(nr-3),]
+nr <- nrow(Mkt);nr
+Mkt$Date[nr]
+tail(Mkt)
+Mkt[nr,c(1,2,5)]; Mkt$Close[nr] - Mkt$Open[nr]
+
+au <- Mkt$aroonUp[nr] ;au
+ad <- Mkt$aroonDn[nr] ;ad
+os <- Mkt$oscillator[nr] ;os
+df <- Mkt$Diff[nr]  ;df
+
+c <- au_df(Mkt,au,df);c
+d <- ad_df(Mkt,ad,df);d
+e <- os_df(Mkt,os,df);e
+c+ d + e
+
+calc_dm_today(Dax_tap)
+  
+Mkt[ (Mkt$prev_aroon_up == au) & 
+       (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+     c(1,18) ]  
+
+Mkt[ (Mkt$prev_aroon_dn == ad) & 
+       (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+     c(1,18) ]
+
+Mkt[ (Mkt$prev_aroon_os == os) & 
+       (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+     c(1,18) ]
+  
 
 cc_rr <- test(CAC_tap,2000)
 cc_rr$pl2 <- ifelse(cc_rr$a4>0,cc_rr$pl,-cc_rr$pl)
