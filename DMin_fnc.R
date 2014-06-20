@@ -131,13 +131,14 @@ r_prev_ta <- function(Mkt, nr){
   au <- Mkt$prev_aroon_up[nr] 
   ad <- Mkt$prev_aroon_dn[nr] 
   os <- Mkt$prev_aroon_os[nr] 
-  df <- Mkt$prev_smadiff[nr]  
-  Mkt <- Mkt[-nr]
+  df <- Mkt$prev_smadiff[nr] 
+  f <- Mkt$pl[nr]
+  Mkt <- Mkt[-nr,]
   c <- au_df(Mkt,au,df)
   d <- ad_df(Mkt,ad,df)
   e <- os_df(Mkt,os,df)
   e2 <- c+d+e
-  f <- Mkt$pl[nr]
+  
   
   return(c(c,d,e,e2,f))
 }
@@ -163,12 +164,13 @@ calc_dm_today <- function(Mkt){
   #st <- ln-1000
   #Mkt <- Mkt[1500:ln]
   
+  #browser()
   au <- Mkt$aroonUp[nr] 
   ad <- Mkt$aroonDn[nr] 
   os <- Mkt$oscillator[nr] 
   df <- Mkt$Diff[nr]  
   
-  Mkt <- Mkt[-nr,]
+  #Mkt <- Mkt[-nr,]
   
   c <- au_df(Mkt,au,df);c
   d <- ad_df(Mkt,ad,df);d

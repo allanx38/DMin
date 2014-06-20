@@ -105,6 +105,8 @@ f100_res <- calc_dm_today(F100_tap) ;f100_res
 # d. ------------ Dow 
 Dow_tap <- read.csv("Dow_tap.csv")
 Dow_tap$Date[nrow(Dow_tap)]
+nr <- nrow(Dow_tap)
+Dow_tap <- Dow_tap[-nr,]
 calc_dm_today(Dow_tap)
 
 # e. ------------ N225 
@@ -131,17 +133,26 @@ Dax_tap <- read.csv("CAC_tap.csv")
 Dax_tap <- read.csv("F100_tap.csv")
 Dax_tap <- read.csv("N225_tap.csv")
 Dax_tap <- read.csv("Oz_tap.csv")
-
+Dax_tap <- read.csv("Dow_tap.csv")
+#Mkt <- Dax_tap
 tail(Dax_tap)
+nr <- nrow(Dax_tap);nr
+Dax_tap <- Dax_tap[1:(nr-3),]
+nr <- nrow(Dax_tap);nr
+
 Dax_tap$Date[nrow(Dax_tap)]
 nr <- nrow(Dax_tap);nr
-au <- Dax_tap$aroonUp[nr];au
-ad <- Dax_tap$aroonDn[nr] ;ad
-os <- Dax_tap$oscillator[nr];os
-df <- Dax_tap$Diff[nr];df
+f <- Dax_tap$Close[nr] - Dax_tap$Open[nr]
+au <- Dax_tap$prev_aroon_up[nr];au
+ad <- Dax_tap$prev_aroon_dn[nr] ;ad
+os <- Dax_tap$prev_aroon_os[nr];os
+df <- Dax_tap$prev_smadiff[nr];df
+Dax_tap <- Dax_tap[-nr,]
+Dax_tap$Date[nrow(Dax_tap)]
 au_df2(Dax_tap, au, df)
 ad_df2(Dax_tap, au, df)
 os_df2(Dax_tap, au, df)
+f
 
 Mkt <- Dax_tap
 r <- Mkt[ (Mkt$prev_aroon_up == au) & 
@@ -168,41 +179,61 @@ Dow_tap <- read.csv("Dow_tap.csv")
 N225_tap <- read.csv("N225_tap.csv")
 Oz_tap <- read.csv("Oz_tap.csv")
 
-tail(Dow_tap)
+tail(Oz_tap)
 
 Dax_tap <- read.csv("N225_tap.csv")
 
-calc_dm_today(Dax_tap)
+Mkt <- Dow_tap
+nr <- nrow(Mkt);nr
+Mkt$Date[nr]
 
-# calc DM pl
-dx_rr <- test(Dax_tap,2000)
-dx_rr$pl2 <- ifelse(dx_rr$a4>0,dx_rr$pl,-dx_rr$pl)
-dx_rr$wl <- ifelse(dx_rr$pl2>0,1,0)
-dx_rr$sm10 <- (SMA(dx_rr["wl"], 10)) * 10
-tail(dx_rr,n=20)
-sum(dx_rr$pl2)
-#sum(dx_rr$pl2 > 0) / ( sum(dx_rr$pl2 < 0) + sum(dx_rr$pl2 > 0) )
-#tail(dx_rr)
+# start with prev:
+r_prev_ta(Mkt, nr)
 
+au <- Mkt$prev_aroon_up[nr] ;au
+ad <- Mkt$prev_aroon_dn[nr] ;ad
+os <- Mkt$prev_aroon_os[nr] ;os
+df <- Mkt$prev_smadiff[nr]  ;df
+f <- Mkt$pl[nr]
+Mkt <- Mkt[-nr,]
+nr <- nrow(Mkt);nr
+Mkt$Date[nr]
+c <- au_df(Mkt,au,df);c
+d <- ad_df(Mkt,ad,df);d
+e <- os_df(Mkt,os,df);e
+e2 <- c+d+e;e2
+
+
+# cla using yest curr vals
+#nr <- nrow(Mkt);nr
+#Mkt <- Mkt[-nr,]
+#nr <- nrow(Mkt);nr
+
+au <- Mkt$aroonUp[nr] ;au
+ad <- Mkt$aroonDn[nr] ;ad
+os <- Mkt$oscillator[nr] ;os
+df <- Mkt$Diff[nr]  ;df
+
+c <- au_df(Mkt,au,df);c
+d <- ad_df(Mkt,ad,df);d
+e <- os_df(Mkt,os,df);e
+c+ d + e
+
+source('DMin_fnc.R')
+calc_dm_today(Mkt)
 nr <- nrow(Dax_tap);nr
 r_prev_ta(Dax_tap, nr)
 
 Mkt <- Dax_tap
+tail(Mkt)
 
-nr <- nrow(Mkt);nr
-Mkt <- Mkt[-nr,]
-nr <- nrow(Mkt);nr
+calc_dm_today(Mkt)
 
-au <- Mkt$prev_aroon_up[nr] 
-ad <- Mkt$prev_aroon_dn[nr] 
-os <- Mkt$prev_aroon_os[nr] 
-df <- Mkt$prev_smadiff[nr]  
+
 Mkt <- Mkt[-nr,]
-c <- au_df(Mkt,au,df);c
-d <- ad_df(Mkt,ad,df);d
-e <- os_df(Mkt,os,df);e
-e2 <- c+d+e
-f <- Mkt$pl[nr]
+calc_dm_today(Mkt)
+
+dw_rr <- test(Dow_tap,3636)
 
 c <- au_df2(Mkt,au,df);c
 d <- ad_df2(Mkt,ad,df);d
@@ -211,6 +242,7 @@ e <- os_df2(Mkt,os,df);e
 source("DMin_fnc.R")
 N225_tap <- read.csv("N225_tap.csv")
 Dax_tap <- read.csv("Dax_tap.csv")
+Dow_tap <- read.csv("Dow_tap.csv")
 
 Mkt <- Dax_tap
 nr <- nrow(Mkt);nr
@@ -230,7 +262,6 @@ d <- ad_df(Mkt,ad,df);d
 e <- os_df(Mkt,os,df);e
 c+ d + e
 
-calc_dm_today(Dax_tap)
   
 Mkt[ (Mkt$prev_aroon_up == au) & 
        (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
@@ -245,6 +276,23 @@ Mkt[ (Mkt$prev_aroon_os == os) &
      c(1,18) ]
   
 
+# ------------------------------
+Dax_tap <- read.csv("Dax_tap.csv")
+CAC_tap <- read.csv("CAC_tap.csv")
+F100_tap <- read.csv("F100_tap.csv")
+Dow_tap <- read.csv("Dow_tap.csv")
+N225_tap <- read.csv("N225_tap.csv")
+Oz_tap <- read.csv("Oz_tap.csv")
+
+tail(Dow_tap)
+
+# calc DM pl
+dx_rr <- test(Dax_tap,2000)
+dx_rr$pl2 <- ifelse(dx_rr$a4>0,dx_rr$pl,-dx_rr$pl)
+dx_rr$wl <- ifelse(dx_rr$pl2>0,1,0)
+dx_rr$sm10 <- (SMA(dx_rr["wl"], 10)) * 10
+tail(dx_rr,n=10)
+
 cc_rr <- test(CAC_tap,2000)
 cc_rr$pl2 <- ifelse(cc_rr$a4>0,cc_rr$pl,-cc_rr$pl)
 cc_rr$wl <- ifelse(cc_rr$pl2>0,1,0)
@@ -256,7 +304,7 @@ ft_rr$wl <- ifelse(ft_rr$pl2>0,1,0)
 ft_rr$sm10 <- (SMA(ft_rr["wl"], 10)) * 10
 
 source('DMin_fnc.R')
-dw_rr <- test2(Dow_tap,2000)
+dw_rr <- test(Dow_tap,2000)
 dw_rr$pl2 <- ifelse(dw_rr$a4>0,dw_rr$pl,-dw_rr$pl)
 dw_rr$wl <- ifelse(dw_rr$pl2>0,1,0)
 dw_rr$sm10 <- (SMA(dw_rr["wl"], 10)) * 10
@@ -270,7 +318,7 @@ lt_row <- nrow(mkt1)
 r <- r_prev_ta(mkt1,lt_row)
 
 N225_tap <- read.csv("N225_tap.csv")
-ni_rr <- test2a(N225_tap,2000)
+ni_rr <- test(N225_tap,2000)
 ni_rr$pl2 <- ifelse(ni_rr$a4>0,ni_rr$pl,-ni_rr$pl)
 ni_rr$wl <- ifelse(ni_rr$pl2>0,1,0)
 ni_rr$sm10 <- (SMA(ni_rr["wl"], 10)) * 10
@@ -311,8 +359,8 @@ dw_rr$Date <- as.POSIXct(dw_rr$Date,format='%d/%m/%Y') ;dw_rr$Date[20]
 ni_rr$Date <- as.POSIXct(ni_rr$Date,format='%d/%m/%Y') ;ni_rr$Date[20]
 oz_rr$Date <- as.POSIXct(oz_rr$Date,format='%d/%m/%Y') ;oz_rr$Date[20]
 
-tail(dw_rr)
-tail(un1)
+tail(oz_rr)
+tail(un3)
 
 # merge pairs
 un1 <- merge(dx_rr[,c(1,9,11,13)],
@@ -467,3 +515,44 @@ au_df <- function(Mkt, au, df){
                (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
              c(18) ] ,na.rm=T)
 }
+
+# -------------------------------------------
+Nik <- read.csv("N225_2000.csv")
+Nik$UD <- ifelse(Nik$Close>Nik$Open,1,0)
+Nik$Date <- as.POSIXct(Nik$Date,format='%d/%m/%Y') ;Nik$Date[20]
+Dax <- read.csv("Dax_2000.csv")
+Dax$UD <- ifelse(Dax$Close>Dax$Open,1,0)
+Dax$Date <- as.POSIXct(Dax$Date,format='%d/%m/%Y') ;Dax$Date[20]
+CAC <- read.csv("CAC_2000.csv")
+CAC$UD <- ifelse(CAC$Close>CAC$Open,1,0)
+CAC$Date <- as.POSIXct(CAC$Date,format='%d/%m/%Y') ;CAC$Date[20]
+
+mg <- merge(Nik,
+             CAC, 
+             by='Date',all=T)
+tail(mg)
+
+rr <- mg[mg$UD.x == 1,]
+nrow(rr)
+rr1 <- mg[mg$UD.x == 1 & mg$UD.y == 1,]
+tail(rr)
+nrow(rr1)
+
+Dax_t <- read.csv("Dax_tap.csv")
+nr <- nrow(Dax_t)
+Dax_t <- Dax_t[100:nr,]
+tail(Dax_t)
+Dax_t$aroonUp
+sum(Dax_t[Dax_t$prev_aroon_up == 95,18])
+
+Dax_t <- read.csv("Dax_tap.csv")
+ni_rr <- test(Dax_t,3092)
+ni_rr$pl2 <- ifelse(ni_rr$a4>0,ni_rr$pl,-ni_rr$pl)
+ni_rr$pl2 <- ifelse(ni_rr$a4>0,ni_rr$Close-ni_rr$Open,ni_rr$Open-ni_rr$Close)
+ni_rr$wl <- ifelse(ni_rr$pl2>0,1,0)
+ni_rr$sm10 <- (SMA(ni_rr["wl"], 10)) * 10
+tail(ni_rr)
+sum(ni_rr[ni_rr$sm10 > 9,11],na.rm=T)
+
+ni_rr$pl2 <- ifelse(ni_rr$a3>0,ni_rr$pl,-ni_rr$pl)
+sum(ni_rr$pl2)
