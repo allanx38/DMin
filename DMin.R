@@ -244,7 +244,7 @@ N225_tap <- read.csv("N225_tap.csv")
 Dax_tap <- read.csv("Dax_tap.csv")
 Dow_tap <- read.csv("Dow_tap.csv")
 
-Mkt <- Dax_tap
+Mkt <- N225_tap
 nr <- nrow(Mkt);nr
 Mkt <- Mkt[1:(nr-3),]
 nr <- nrow(Mkt);nr
@@ -252,29 +252,36 @@ Mkt$Date[nr]
 tail(Mkt)
 Mkt[nr,c(1,2,5)]; Mkt$Close[nr] - Mkt$Open[nr]
 
-au <- Mkt$aroonUp[nr] ;au
-ad <- Mkt$aroonDn[nr] ;ad
-os <- Mkt$oscillator[nr] ;os
-df <- Mkt$Diff[nr]  ;df
+au <- Mkt$aroonUp[nr -1] ;au
+ad <- Mkt$aroonDn[nr - 1] ;ad
+os <- Mkt$oscillator[nr-1] ;os
+df <- Mkt$Diff[nr-1]  ;df
+f <- Mkt$pl[nr]
 
-c <- au_df(Mkt,au,df);c
-d <- ad_df(Mkt,ad,df);d
-e <- os_df(Mkt,os,df);e
+Mkta <- Mkt[-nr,]
+
+c <- au_df(Mkta,au,df);c
+d <- ad_df(Mkta,ad,df);d
+e <- os_df(Mkta,os,df);e
 c+ d + e
-
+f
   
-Mkt[ (Mkt$prev_aroon_up == au) & 
-       (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+
+Mkta[ (Mkta$prev_aroon_up == au) & 
+       (Mkta$prev_smadiff > (df - 10) & Mkta$prev_smadiff < (df + 10)), 
      c(1,18) ]  
 
-Mkt[ (Mkt$prev_aroon_dn == ad) & 
-       (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+Mkta[ (Mkta$prev_aroon_dn == ad) & 
+       (Mkta$prev_smadiff > (df - 10) & Mkta$prev_smadiff < (df + 10)), 
      c(1,18) ]
 
-Mkt[ (Mkt$prev_aroon_os == os) & 
-       (Mkt$prev_smadiff > (df - 10) & Mkt$prev_smadiff < (df + 10)), 
+Mkta[ (Mkta$prev_aroon_os == os) & 
+       (Mkta$prev_smadiff > (df - 10) & Mkta$prev_smadiff < (df + 10)), 
      c(1,18) ]
-  
+
+source("DMin_fnc.R")
+nr <- nrow(Mkt);nr
+res <- test3(Mkt,3470)
 
 # ------------------------------
 Dax_tap <- read.csv("Dax_tap.csv")

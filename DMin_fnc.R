@@ -306,6 +306,38 @@ test2b <- function(Mkt,st){
   res <- res[-1,]
   return(res)
 }
+test3 <- function(Mkt,st){
+  res <- as.data.frame(matrix(seq(5),nrow=1,ncol=5))
+  res_mkt <- as.data.frame(matrix(seq(5),nrow=1,ncol=5))
+  colnames(res_mkt) <- colnames(Mkt[c(1,2,3,4,5)])
+  browser()
+  ln <- nrow(Mkt)
+  for(i in st:ln){
+    mkt1 <- Mkt[100:i,]
+    lt_row <- nrow(mkt1)
+    au <- mkt1$aroonUp[lt_row-1] 
+    ad <- mkt1$aroonDn[lt_row-1] 
+    os <- mkt1$aroonDn[lt_row-1] 
+    df <- mkt1$Diff[lt_row-1]
+    g <- mkt1$pl[lt_row]
+    
+    mkt1 <- mkt1[-lt_row,]
+    
+    c1 <- au_df(mkt1,au,df)
+    d <- ad_df(mkt1,ad,df)
+    e <- os_df(mkt1,os,df)
+    f <- c1 + d + e
+    r <- c(c1, d, e, f, g )
+    
+    res <- rbind(res,r)
+    res_mkt <- rbind(res_mkt,Mkt[i,c(1,2,3,4,5)])
+    #browser()
+  }
+  colnames(res) <- c('a1','a2','a3','a4','pl')
+  res <- cbind(res_mkt,res)
+  res <- res[-1,]
+  return(res)
+}
 
 #for(i in 1:length(fil)){
 
