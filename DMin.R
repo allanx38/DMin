@@ -45,6 +45,8 @@ write.csv(F100_2,"F100_2000.csv",row.names=FALSE)
 #N225
 Nik <- read.csv("N225_2000.csv")
 tail(Nik)
+ln <- nrow(Nik)
+Nik <- Nik[-ln,]
 Nik_2 <- add_line(indata,4,Nik) #4th line fr Nikkei
 tail(Nik_2)
 write.csv(Nik_2,"N225_2000.csv",row.names=FALSE)
