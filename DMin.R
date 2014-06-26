@@ -22,23 +22,39 @@ tail(indata)
 #Dax
 Dax <- read.csv("Dax_2000.csv")
 tail(Dax)
-#ln <- nrow(Dax)
-#Dax <- Dax[-3689,]
+ln <- nrow(Dax)
+Dax <- Dax[-ln,]
 Dax_2 <- add_line(indata,1,Dax)
+tail(Dax_2)
+write.csv(Dax_2,"Dax_2000.csv",row.names=FALSE)
+#add dummy entry, tomoorw
+Dax_2 <- add_line(indata,6,Dax)
 tail(Dax_2)
 write.csv(Dax_2,"Dax_2000.csv",row.names=FALSE)
 
 #CAC
 CAC <- read.csv("CAC_2000.csv")
 tail(CAC)
+ln <- nrow(CAC)
+CAC <- CAC[-ln,]
 CAC_2 <- add_line(indata,2,CAC)
+tail(CAC_2)
+write.csv(CAC_2,"CAC_2000.csv",row.names=FALSE)
+#add dummy entry, tomoorw
+CAC_2 <- add_line(indata,6,CAC_2)
 tail(CAC_2)
 write.csv(CAC_2,"CAC_2000.csv",row.names=FALSE)
 
 #FTSE
 F100 <- read.csv("F100_2000.csv")
 tail(F100)
+ln <- nrow(F100)
+F100 <- F100[-ln,]
 F100_2 <- add_line(indata,3,F100)
+tail(F100_2)
+write.csv(F100_2,"F100_2000.csv",row.names=FALSE)
+#add dummy entry, tomoorw
+F100_2 <- add_line(indata,6,F100_2)
 tail(F100_2)
 write.csv(F100_2,"F100_2000.csv",row.names=FALSE)
 
@@ -50,11 +66,21 @@ Nik <- Nik[-ln,]
 Nik_2 <- add_line(indata,4,Nik) #4th line fr Nikkei
 tail(Nik_2)
 write.csv(Nik_2,"N225_2000.csv",row.names=FALSE)
+#add dummy entry, tomoorw
+Nik_2 <- add_line(indata,6,Nik)
+tail(Nik_2)
+write.csv(Nik_2,"N225_2000.csv",row.names=FALSE)
 
 #Oz
 Oz <- read.csv("Oz_2000.csv")
 tail(Oz)
+ln <- nrow(Oz)
+Oz <- Oz[-ln,]
 Oz_2 <- add_line(indata,5,Oz) #4th line fr Nikkei
+tail(Oz_2)
+write.csv(Oz_2,"Oz_2000.csv",row.names=FALSE)
+#add dummy entry, tomoorw
+Oz_2 <- add_line(indata,6,Oz_2)
 tail(Oz_2)
 write.csv(Oz_2,"Oz_2000.csv",row.names=FALSE)
 
