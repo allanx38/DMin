@@ -28,7 +28,7 @@ Dax_2 <- add_line(indata,1,Dax)
 tail(Dax_2)
 write.csv(Dax_2,"Dax_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-Dax_2 <- add_line(indata,6,Dax)
+Dax_2 <- add_line(indata,6,Dax_2)
 tail(Dax_2)
 write.csv(Dax_2,"Dax_2000.csv",row.names=FALSE)
 
