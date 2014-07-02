@@ -67,7 +67,7 @@ Nik_2 <- add_line(indata,4,Nik) #4th line fr Nikkei
 tail(Nik_2)
 write.csv(Nik_2,"N225_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-Nik_2 <- add_line(indata,6,Nik)
+Nik_2 <- add_line(indata,6,Nik_2)
 tail(Nik_2)
 write.csv(Nik_2,"N225_2000.csv",row.names=FALSE)
 
