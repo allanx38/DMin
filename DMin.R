@@ -17,7 +17,7 @@ library(TTR)
 # read from clipboard
 indata <- read.table("clipboard")
 colnames(indata) <- c('Mkt','Date','Open','High','Low','Close')
-tail(indata)
+tail(indata,n=7)
 
 #Dax
 Dax <- read.csv("Dax_2000.csv")
@@ -28,7 +28,7 @@ Dax_2 <- add_line(indata,1,Dax)
 tail(Dax_2)
 write.csv(Dax_2,"Dax_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-Dax_2 <- add_line(indata,6,Dax_2)
+Dax_2 <- add_line(indata,7,Dax_2)
 tail(Dax_2)
 write.csv(Dax_2,"Dax_2000.csv",row.names=FALSE)
 
@@ -41,7 +41,7 @@ CAC_2 <- add_line(indata,2,CAC)
 tail(CAC_2)
 write.csv(CAC_2,"CAC_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-CAC_2 <- add_line(indata,6,CAC_2)
+CAC_2 <- add_line(indata,7,CAC_2)
 tail(CAC_2)
 write.csv(CAC_2,"CAC_2000.csv",row.names=FALSE)
 
@@ -54,7 +54,7 @@ F100_2 <- add_line(indata,3,F100)
 tail(F100_2)
 write.csv(F100_2,"F100_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-F100_2 <- add_line(indata,6,F100_2)
+F100_2 <- add_line(indata,7,F100_2)
 tail(F100_2)
 write.csv(F100_2,"F100_2000.csv",row.names=FALSE)
 
@@ -67,7 +67,7 @@ Nik_2 <- add_line(indata,4,Nik) #4th line fr Nikkei
 tail(Nik_2)
 write.csv(Nik_2,"N225_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-Nik_2 <- add_line(indata,6,Nik_2)
+Nik_2 <- add_line(indata,7,Nik_2)
 tail(Nik_2)
 write.csv(Nik_2,"N225_2000.csv",row.names=FALSE)
 
@@ -80,9 +80,22 @@ Oz_2 <- add_line(indata,5,Oz) #4th line fr Nikkei
 tail(Oz_2)
 write.csv(Oz_2,"Oz_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-Oz_2 <- add_line(indata,6,Oz_2)
+Oz_2 <- add_line(indata,7,Oz_2)
 tail(Oz_2)
 write.csv(Oz_2,"Oz_2000.csv",row.names=FALSE)
+
+#Dow
+Dow <- read.csv("Dow_2000.csv")
+tail(Dow)
+ln <- nrow(Dow)
+Dow <- Dow[-ln,]
+Dow_2 <- add_line(indata,6,Dow) #4th line fr Nikkei
+tail(Dow_2)
+write.csv(Dow_2,"Dow_2000.csv",row.names=FALSE)
+#add dummy entry, tomoorw
+Dow_2 <- add_line(indata,7,Dow_2)
+tail(Dow_2)
+write.csv(Dow_2,"Dow_2000.csv",row.names=FALSE)
 
 # -------------------------------------------------------------
 # 2. Create TAP files
