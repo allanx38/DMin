@@ -607,7 +607,7 @@ df10 <- as.data.frame(matrix(seq(11),nrow=1,ncol=11))
 
 minor_HL <- function(fil, nm){
   df <- t(c('a','b'))
-  browser()
+  #browser()
   for(i in 1:length(fil)){
     Mkt <- read.csv(fil[i])
     
@@ -619,7 +619,7 @@ minor_HL <- function(fil, nm){
     Mkt$OH <- Mkt$High -  Mkt$Open
     Mkt$mn <- ifelse(Mkt$OH>Mkt$OL,Mkt$OL,Mkt$OH)
     
-    a <- quantile(Mkt$mn, probs=0.90)
+    a <- round(quantile(Mkt$mn, probs=0.90),2)
     b <- nm[i]
     df <- rbind(df,t(c(a,b)))
   }
