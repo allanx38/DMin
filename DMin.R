@@ -591,3 +591,41 @@ sum(ni_rr[ni_rr$sm10 > 9,11],na.rm=T)
 
 ni_rr$pl2 <- ifelse(ni_rr$a3>0,ni_rr$pl,-ni_rr$pl)
 sum(ni_rr$pl2)
+
+# ------------------------------------------------
+# --------- min OL
+
+setwd("D:/Allan/DropBox/Dmin")
+fil <- c("Dax_2000.csv",
+         "CAC_2000.csv", 
+         "F100_2000.csv",
+         "Dow_2000.csv",
+         "N225_2000.csv",
+         "Oz_2000.csv")
+nm <- c("Dax", "CAC", "F100", "Dow", "Nik", "Oz")
+df10 <- as.data.frame(matrix(seq(11),nrow=1,ncol=11))
+
+minor_HL <- function(fil, nm){
+  df <- t(c('a','b'))
+  browser()
+  for(i in 1:length(fil)){
+    Mkt <- read.csv(fil[i])
+    
+    ln <- nrow(Mkt)
+    st <- ln - 50
+    Mkt <- Mkt[st:ln,]
+    
+    Mkt$OL <- Mkt$Open - Mkt$Low
+    Mkt$OH <- Mkt$High -  Mkt$Open
+    Mkt$mn <- ifelse(Mkt$OH>Mkt$OL,Mkt$OL,Mkt$OH)
+    
+    a <- quantile(Mkt$mn, probs=0.90)
+    b <- nm[i]
+    df <- rbind(df,t(c(a,b)))
+  }
+  colnames(df) <- c('Minor Move', 'Mkt')
+  df <- df[-1,]
+}
+
+res <- minor_HL(fil, nm)
+res
