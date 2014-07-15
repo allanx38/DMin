@@ -19,6 +19,23 @@ indata <- read.table("clipboard")
 colnames(indata) <- c('Mkt','Date','Open','High','Low','Close')
 tail(indata,n=7)
 
+Dax <- read.csv("Dax_2000.csv")
+tail(Dax)
+ln <- nrow(Dax)
+Dax <- Dax[-ln,]
+
+add_dat <- function(Dax){
+  #browser()
+  #Dax$Date <- as.POSIXct(Dax$Date,format='%Y-%m-%d')
+  ln <- nrow(Dax)
+  tod_data <- Dax[ln,]
+  tod_data$Date <- tod_data$Date + 86400
+  Dax2 <- rbind(Dax,tod_data)
+  return(Dax2)
+}
+
+
+
 #Dax
 Dax <- read.csv("Dax_2000.csv")
 tail(Dax)
@@ -28,9 +45,12 @@ Dax_2 <- add_line(indata,1,Dax)
 tail(Dax_2)
 write.csv(Dax_2,"Dax_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-Dax_2 <- add_line(indata,7,Dax_2)
-tail(Dax_2)
-write.csv(Dax_2,"Dax_2000.csv",row.names=FALSE)
+Dax <- read.csv("Dax_2000.csv")
+tail(Dax)
+Dax$Date <- as.POSIXct(Dax$Date,format='%Y-%m-%d')
+Dax_new <- add_dat(Dax)
+tail(Dax_new)
+write.csv(Dax_new,"Dax_2000.csv",row.names=FALSE)
 
 #CAC
 CAC <- read.csv("CAC_2000.csv")
@@ -41,9 +61,15 @@ CAC_2 <- add_line(indata,2,CAC)
 tail(CAC_2)
 write.csv(CAC_2,"CAC_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-CAC_2 <- add_line(indata,7,CAC_2)
-tail(CAC_2)
-write.csv(CAC_2,"CAC_2000.csv",row.names=FALSE)
+CAC <- read.csv("CAC_2000.csv")
+tail(CAC)
+CAC$Date <- as.POSIXct(CAC$Date,format='%d/%m/%Y')
+CAC_new <- add_dat(CAC)
+tail(CAC_new)
+write.csv(CAC_new,"CAC_2000.csv",row.names=FALSE)
+
+#CAC_2 <- add_line(indata,7,CAC_2)
+#tail(CAC_2)
 
 #FTSE
 F100 <- read.csv("F100_2000.csv")
@@ -54,9 +80,16 @@ F100_2 <- add_line(indata,3,F100)
 tail(F100_2)
 write.csv(F100_2,"F100_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
+F100 <- read.csv("F100_2000.csv")
+tail(F100)
+F100$Date <- as.POSIXct(F100$Date,format='%d/%m/%Y')
+F100_new <- add_dat(F100)
+tail(F100_new)
+write.csv(F100_new,"F100_2000.csv",row.names=FALSE)
+
 F100_2 <- add_line(indata,7,F100_2)
 tail(F100_2)
-write.csv(F100_2,"F100_2000.csv",row.names=FALSE)
+
 
 #N225
 Nik <- read.csv("N225_2000.csv")
@@ -67,9 +100,16 @@ Nik_2 <- add_line(indata,4,Nik) #4th line fr Nikkei
 tail(Nik_2)
 write.csv(Nik_2,"N225_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-Nik_2 <- add_line(indata,7,Nik_2)
-tail(Nik_2)
-write.csv(Nik_2,"N225_2000.csv",row.names=FALSE)
+Nik <- read.csv("N225_2000.csv")
+tail(Nik)
+Nik$Date <- as.POSIXct(Nik$Date,format='%d/%m/%Y')
+Nik_new <- add_dat(Nik)
+tail(Nik_new)
+write.csv(Nik_new,"N225_2000.csv",row.names=FALSE)
+
+#Nik_2 <- add_line(indata,7,Nik_2)
+#tail(Nik_2)
+
 
 #Oz
 Oz <- read.csv("Oz_2000.csv")
@@ -80,9 +120,16 @@ Oz_2 <- add_line(indata,5,Oz) #4th line fr Nikkei
 tail(Oz_2)
 write.csv(Oz_2,"Oz_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
-Oz_2 <- add_line(indata,7,Oz_2)
-tail(Oz_2)
-write.csv(Oz_2,"Oz_2000.csv",row.names=FALSE)
+Oz <- read.csv("Oz_2000.csv")
+tail(Oz)
+Oz$Date <- as.POSIXct(Oz$Date,format='%d/%m/%Y')
+Oz_new <- add_dat(Oz)
+tail(Oz_new)
+write.csv(Oz_new,"Oz_2000.csv",row.names=FALSE)
+
+#Oz_2 <- add_line(indata,7,Oz_2)
+#tail(Oz_2)
+
 
 #Dow
 Dow <- read.csv("Dow_2000.csv")
@@ -96,6 +143,24 @@ write.csv(Dow_2,"Dow_2000.csv",row.names=FALSE)
 Dow_2 <- add_line(indata,7,Dow_2)
 tail(Dow_2)
 write.csv(Dow_2,"Dow_2000.csv",row.names=FALSE)
+
+
+# ------ Test
+Nik <- read.csv("N225_2000.csv")
+tail(Nik)
+fin <- 3350
+test_data <- Nik[1:fin,]
+tail(test_data)
+
+test_data$Date <- as.POSIXct(test_data$Date,format='%Y-%m-%d')
+test_data2 <- add_dat(test_data)
+tail(test_data2)
+
+write.csv(test_data2,"ar_test.csv",row.names=FALSE)
+
+fin1 <- fin + 1
+Nik[fin1,5] - Nik[fin1,2]
+
 
 # -------------------------------------------------------------
 # 2. Create TAP files

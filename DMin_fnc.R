@@ -3,8 +3,10 @@
 # 1. Add Data to csv
 
 add_line<- function(indata, line_num, Mkt){
+  #browser()
   indata$Date <- as.POSIXct(indata$Date,format='%m/%d/%Y')
-  indata$Date <- as.character.Date(indata$Date,format='%d/%m/%Y')
+  #indata$Date <- as.character.Date(indata$Date,format='%d/%m/%Y')
+  indata$Date <- as.character.Date(indata$Date,format='%Y-%m-%d')
   Mkt_new <- rbind(Mkt,indata[line_num,2:6])
   return(Mkt_new)
 }
