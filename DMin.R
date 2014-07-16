@@ -30,10 +30,11 @@ add_dat <- function(Dax){
   ln <- nrow(Dax)
   tod_data <- Dax[ln,]
   tod_data$Date <- tod_data$Date + 86400
+  Dax$Date <- as.POSIXct(Dax$Date,format='%Y-%m-%d')
+  
   Dax2 <- rbind(Dax,tod_data)
   return(Dax2)
 }
-
 
 
 #Dax
@@ -63,7 +64,7 @@ write.csv(CAC_2,"CAC_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
 CAC <- read.csv("CAC_2000.csv")
 tail(CAC)
-CAC$Date <- as.POSIXct(CAC$Date,format='%d/%m/%Y')
+CAC$Date <- as.POSIXct(CAC$Date,format='%Y-%m-%d')
 CAC_new <- add_dat(CAC)
 tail(CAC_new)
 write.csv(CAC_new,"CAC_2000.csv",row.names=FALSE)
@@ -82,14 +83,14 @@ write.csv(F100_2,"F100_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
 F100 <- read.csv("F100_2000.csv")
 tail(F100)
-F100$Date <- as.POSIXct(F100$Date,format='%d/%m/%Y')
+#F100$Date <- as.POSIXct(F100$Date,format='%d/%m/%Y')
+F100$Date <- as.POSIXct(F100$Date,format='%Y-%m-%d')
 F100_new <- add_dat(F100)
 tail(F100_new)
 write.csv(F100_new,"F100_2000.csv",row.names=FALSE)
 
-F100_2 <- add_line(indata,7,F100_2)
-tail(F100_2)
-
+#F100_2 <- add_line(indata,7,F100_2)
+#tail(F100_2)
 
 #N225
 Nik <- read.csv("N225_2000.csv")
@@ -102,14 +103,13 @@ write.csv(Nik_2,"N225_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
 Nik <- read.csv("N225_2000.csv")
 tail(Nik)
-Nik$Date <- as.POSIXct(Nik$Date,format='%d/%m/%Y')
+Nik$Date <- as.POSIXct(Nik$Date,format='%Y-%m-%d')
 Nik_new <- add_dat(Nik)
 tail(Nik_new)
 write.csv(Nik_new,"N225_2000.csv",row.names=FALSE)
 
 #Nik_2 <- add_line(indata,7,Nik_2)
 #tail(Nik_2)
-
 
 #Oz
 Oz <- read.csv("Oz_2000.csv")
@@ -122,14 +122,13 @@ write.csv(Oz_2,"Oz_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
 Oz <- read.csv("Oz_2000.csv")
 tail(Oz)
-Oz$Date <- as.POSIXct(Oz$Date,format='%d/%m/%Y')
+Oz$Date <- as.POSIXct(Oz$Date,format='%Y-%m-%d')
 Oz_new <- add_dat(Oz)
 tail(Oz_new)
 write.csv(Oz_new,"Oz_2000.csv",row.names=FALSE)
 
 #Oz_2 <- add_line(indata,7,Oz_2)
 #tail(Oz_2)
-
 
 #Dow
 Dow <- read.csv("Dow_2000.csv")
@@ -140,15 +139,29 @@ Dow_2 <- add_line(indata,6,Dow) #4th line fr Nikkei
 tail(Dow_2)
 write.csv(Dow_2,"Dow_2000.csv",row.names=FALSE)
 #add dummy entry, tomoorw
+Dow <- read.csv("Dow_2000.csv")
+tail(Dow)
+Dow$Date <- as.POSIXct(Dow$Date,format='%Y-%m-%d')
+Dow_new <- add_dat(Dow)
+tail(Dow_new)
+write.csv(Dow_new,"Dow_2000.csv",row.names=FALSE)
+
 Dow_2 <- add_line(indata,7,Dow_2)
 tail(Dow_2)
-write.csv(Dow_2,"Dow_2000.csv",row.names=FALSE)
 
+
+Dow <- read.csv("Dow_2000.csv")
+Dow$Date <- as.POSIXct(Dow$Date,format='%d/%m/%Y')
+tail(Dow)
+Dow$Date <- as.POSIXct(Dow$Date,format='%Y-%m-%d')
+write.csv(Dow,"Dow_2000.csv",row.names=FALSE)
 
 # ------ Test
 Nik <- read.csv("N225_2000.csv")
+Nik <- read.csv("Dow_2000.csv")
 tail(Nik)
-fin <- 3350
+nrow(Nik)
+fin <- 3654
 test_data <- Nik[1:fin,]
 tail(test_data)
 
