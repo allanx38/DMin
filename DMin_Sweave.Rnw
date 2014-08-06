@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage[a4paper,margin=0.5in,landscape]{geometry}
+\begin{document}
+
+<<echo=FALSE>>=
+
+setwd("D:/Allan/DropBox/Dmin")
+library(TTR)
+library(xtable)
+
+addTA <- function(Mkt){
+  Mkt[2:5] <- round(Mkt[2:5])
+  #pl
+  Mkt$pl <- Mkt$Close - Mkt$Open
+  #atr
+  atr <- ATR(Mkt[,c("High","Low","Close")], n=14)
+  Mkt$atr <- round(atr[,"atr"])
+  # min/max mv
+  Mkt$OH <- Mkt$High-Mkt$Open
+  Mkt$OL <- Mkt$Open-Mkt$Low
+  Mkt$mn <- ifelse(Mkt$OH>Mkt$OL,Mkt$OL,Mkt$OH)
+  Mkt$mx <- ifelse(Mkt$OH>Mkt$OL,Mkt$OH,Mkt$OL)
+  #SMA
+  sma <- round(SMA(Mkt["Close"], 10))
+  Mkt <- cbind(Mkt, sma)
+  Mkt$Diff <- ifelse(!is.na(Mkt$sma), Mkt$Close - Mkt$sma, NA)
+  #aroon
+  ar <- aroon(Mkt$Close, n=20)
+  Mkt <- cbind(Mkt, ar)
+  #roc
+  Mkt$mom <- round(momentum(Mkt$Close,n=12)) 
+  return(Mkt)
+}
+@
+
+<<echo=FALSE>>=
+Dax <- read.csv("Dax_2000.csv")
+Mkt <- addTA(Dax)
+@
+
+<<echo=FALSE,results=tex>>=
+res <- tail(Mkt[-c(8,9)],n=20)
+print(xtable(res,caption ="Dax"), 
+        include.rownames=F,caption.placement = "top")
+@
+
+<<echo=FALSE>>=
+Dow <- read.csv("Dow_2000.csv")
+Mkt_dw <- addTA(Dow)
+@
+
+<<echo=FALSE,results=tex>>=
+res2 <- tail(Mkt_dw[-c(8,9)],n=20)
+print(xtable(res2,caption ="Dow"), 
+        include.rownames=F,caption.placement = "top")
+@
+
+
+
+\end{document}
